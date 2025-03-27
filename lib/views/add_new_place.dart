@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:places/models/place_model.dart';
 import 'package:places/providers/places_provider.dart';
+import 'package:places/widgets/image_input.dart';
 
 class AddNewPlace extends ConsumerStatefulWidget {
   const AddNewPlace({super.key});
@@ -57,6 +58,8 @@ class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
                   enteredPlaceName = value ?? "";
                 },
               ),
+              SizedBox(height: 16),
+              ImageInput(),
               SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
