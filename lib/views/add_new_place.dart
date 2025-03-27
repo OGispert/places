@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:places/models/place_model.dart';
+import 'package:places/providers/places_provider.dart';
 
-class AddNewPlace extends StatefulWidget {
+class AddNewPlace extends ConsumerStatefulWidget {
   const AddNewPlace({super.key});
 
   @override
-  State<AddNewPlace> createState() => _AddNewPlaceState();
+  ConsumerState<AddNewPlace> createState() => _AddNewPlaceState();
 }
 
-class _AddNewPlaceState extends State<AddNewPlace> {
+class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
   final formKey = GlobalKey<FormState>();
-  var uuid = Uuid();
   var enteredPlaceName = '';
 
   void savePlace() {
     if (formKey.currentState?.validate() == true) {
       formKey.currentState?.save();
 
-      final newPlace = Place(id: uuid.v4(), name: enteredPlaceName);
+      final newPlace = Place(name: enteredPlaceName);
 
-      Navigator.of(context).pop(newPlace);
+      ref.read(placesProvider.notifier).addPlace(newPlace);
+
+      Navigator.of(context).pop();
     }
   }
 
@@ -31,17 +33,17 @@ class _AddNewPlaceState extends State<AddNewPlace> {
       body: Form(
         key: formKey,
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               TextFormField(
                 maxLength: 50,
-                decoration: InputDecoration(label: Text('Place name')),
+                decoration: const InputDecoration(labelText: 'Place name'),
                 onTapOutside: (PointerDownEvent event) {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
                 keyboardType: TextInputType.name,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 validator: (value) {
                   if (value == null ||
                       value.isEmpty ||
@@ -63,12 +65,13 @@ class _AddNewPlaceState extends State<AddNewPlace> {
                     onPressed: () {
                       formKey.currentState?.reset();
                     },
-                    child: Text('Reset'),
+                    child: const Text('Reset'),
                   ),
                   SizedBox(width: 16),
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: savePlace,
-                    child: Text('Save Place'),
+                    icon: Icon(Icons.add),
+                    label: const Text('Save Place'),
                   ),
                 ],
               ),
