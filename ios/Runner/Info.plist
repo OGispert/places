@@ -34,6 +34,8 @@
 	<string>This app needa access to your camera to add an image to your places.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needa access to your microphone to add a video to your places.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to add it to your places.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
