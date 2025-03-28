@@ -46,17 +46,27 @@ class _PlaceListState extends ConsumerState<PlaceList> {
             onDismissed: (direction) {
               removePlace(widget.places[index]);
             },
-            child: ListTile(
-              title: Text(
-                widget.places[index].name,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 18,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: Hero(
+                  tag: widget.places[index].id,
+                  child: CircleAvatar(
+                    radius: 26,
+                    backgroundImage: FileImage(widget.places[index].image),
+                  ),
                 ),
+                title: Text(
+                  widget.places[index].name,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 18,
+                  ),
+                ),
+                onTap: () {
+                  placeDetails(widget.places[index]);
+                },
               ),
-              onTap: () {
-                placeDetails(widget.places[index]);
-              },
             ),
           ),
     );

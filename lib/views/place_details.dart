@@ -8,6 +8,18 @@ class PlaceDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(place.name)));
+    return Scaffold(
+      appBar: AppBar(title: Text(place.name)),
+      body: Hero(
+        // creates a transition animation between views.
+        tag: place.id,
+        child: Image.file(
+          place.image,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+      ),
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:places/models/place_model.dart';
 import 'package:places/providers/places_provider.dart';
 import 'package:places/widgets/image_input.dart';
+import 'dart:io';
 
 class AddNewPlace extends ConsumerStatefulWidget {
   const AddNewPlace({super.key});
@@ -14,12 +15,13 @@ class AddNewPlace extends ConsumerStatefulWidget {
 class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
   final formKey = GlobalKey<FormState>();
   var enteredPlaceName = '';
+  File? selectedImage;
 
   void savePlace() {
-    if (formKey.currentState?.validate() == true) {
+    if (formKey.currentState?.validate() == true && selectedImage != null) {
       formKey.currentState?.save();
 
-      final newPlace = Place(name: enteredPlaceName);
+      final newPlace = Place(name: enteredPlaceName, image: selectedImage!);
 
       ref.read(placesProvider.notifier).addPlace(newPlace);
 
@@ -59,7 +61,11 @@ class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
                 },
               ),
               SizedBox(height: 16),
-              ImageInput(),
+              ImageInput(
+                onPickImage: (image) {
+                  selectedImage = image;
+                },
+              ),
               SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
