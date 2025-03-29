@@ -63,6 +63,7 @@ class _PlaceListState extends ConsumerState<PlaceList> {
                     fontSize: 18,
                   ),
                 ),
+                subtitle: Text(widget.places[index].location.address),
                 onTap: () {
                   placeDetails(widget.places[index]);
                 },

@@ -18,9 +18,10 @@ class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
   final formKey = GlobalKey<FormState>();
   var enteredPlaceName = '';
   File? selectedImage;
+  PlaceLocation? selectedLocation;
 
   void savePlace() {
-    if (selectedImage == null) {
+    if (selectedImage == null || selectedLocation == null) {
       // show an alert
       return;
     }
@@ -28,7 +29,11 @@ class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
     if (formKey.currentState?.validate() == true) {
       formKey.currentState?.save();
 
-      final newPlace = Place(name: enteredPlaceName, image: selectedImage!);
+      final newPlace = Place(
+        name: enteredPlaceName,
+        image: selectedImage!,
+        location: selectedLocation!,
+      );
 
       ref.read(placesProvider.notifier).addPlace(newPlace);
 
@@ -75,7 +80,11 @@ class _AddNewPlaceState extends ConsumerState<AddNewPlace> {
                   },
                 ),
                 SizedBox(height: 16),
-                LocationInput(),
+                LocationInput(
+                  onSelectLocation: (location) {
+                    selectedLocation = location;
+                  },
+                ),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

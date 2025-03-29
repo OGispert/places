@@ -6,6 +6,13 @@ class PlaceDetails extends StatelessWidget {
 
   final Place place;
 
+  String get locationImage {
+    final lat = place.location.latitude;
+    final long = place.location.longitude;
+    final googleAPIKey = 'AIzaSyDs7iOsWPIs5vZxCxMOSKxL6aZjaKkDfd4';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:P%7C$lat,$long&key=$googleAPIKey';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,11 +20,47 @@ class PlaceDetails extends StatelessWidget {
       body: Hero(
         // creates a transition animation between views.
         tag: place.id,
-        child: Image.file(
-          place.image,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
+        child: Stack(
+          children: [
+            Image.file(
+              place.image,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 70,
+                    backgroundImage: NetworkImage(locationImage),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.transparent, Colors.black54],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    child: Text(
+                      place.location.address,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
+import 'package:places/models/place_model.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key});
+  const LocationInput({super.key, required this.onSelectLocation});
+
+  final void Function(PlaceLocation location) onSelectLocation;
 
   @override
   State<LocationInput> createState() {
@@ -11,8 +17,15 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  LocationData? userLocation;
+  PlaceLocation? userLocation;
   var isGettingLocation = false;
+  final googleAPIKey = 'AIzaSyDs7iOsWPIs5vZxCxMOSKxL6aZjaKkDfd4';
+
+  String get locationImage {
+    final lat = userLocation?.latitude;
+    final long = userLocation?.longitude;
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:P%7C$lat,$long&key=$googleAPIKey';
+  }
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -43,9 +56,27 @@ class _LocationInputState extends State<LocationInput> {
 
     locationData = await location.getLocation();
 
+    final lat = locationData.latitude ?? 0.0;
+    final long = locationData.longitude ?? 0.0;
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=$googleAPIKey',
+    );
+    final response = await http.get(url);
+    final responseData = jsonDecode(response.body);
+    final address = responseData['results'][0]['formatted_address'];
+
     setState(() {
+      userLocation = PlaceLocation(
+        latitude: lat,
+        longitude: long,
+        address: address,
+      );
       isGettingLocation = false;
     });
+
+    if (userLocation != null) {
+      widget.onSelectLocation(userLocation!);
+    }
   }
 
   @override
@@ -59,6 +90,15 @@ class _LocationInputState extends State<LocationInput> {
 
     if (isGettingLocation) {
       previewContent = CircularProgressIndicator.adaptive();
+    }
+
+    if (userLocation != null) {
+      previewContent = Image.network(
+        locationImage,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
     }
 
     return Column(
