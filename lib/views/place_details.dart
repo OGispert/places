@@ -9,7 +9,7 @@ class PlaceDetails extends StatelessWidget {
   String get locationImage {
     final lat = place.location.latitude;
     final long = place.location.longitude;
-    final googleAPIKey = 'AIzaSyDs7iOsWPIs5vZxCxMOSKxL6aZjaKkDfd4';
+    final googleAPIKey = '';
     return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:P%7C$lat,$long&key=$googleAPIKey';
   }
 
