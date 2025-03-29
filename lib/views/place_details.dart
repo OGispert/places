@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/models/place_model.dart';
+import 'package:places/views/map.dart';
 
 class PlaceDetails extends StatelessWidget {
   const PlaceDetails({super.key, required this.place});
@@ -10,7 +11,7 @@ class PlaceDetails extends StatelessWidget {
     final lat = place.location.latitude;
     final long = place.location.longitude;
     final googleAPIKey = '';
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:P%7C$lat,$long&key=$googleAPIKey';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:P%7C$lat,$long&key=$googleAPIKey';
   }
 
   @override
@@ -34,9 +35,22 @@ class PlaceDetails extends StatelessWidget {
               right: 0,
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundImage: NetworkImage(locationImage),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (context) => MapView(
+                                location: place.location,
+                                isSelecting: false,
+                              ),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 70,
+                      backgroundImage: NetworkImage(locationImage),
+                    ),
                   ),
                   Container(
                     decoration: BoxDecoration(
