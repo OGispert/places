@@ -6,8 +6,8 @@ class MapView extends StatefulWidget {
   const MapView({
     super.key,
     this.location = const PlaceLocation(
-      latitude: 40.400,
-      longitude: -80.111,
+      latitude: 37.329910409244256,
+      longitude: -122.03035596119754,
       address: '',
     ),
     this.isSelecting = true,

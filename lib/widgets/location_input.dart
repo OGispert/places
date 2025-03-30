@@ -21,7 +21,7 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   PlaceLocation? userLocation;
   var isGettingLocation = false;
-  final googleAPIKey = '';
+  final googleAPIKey = 'GOOGLE_API_KEY';
 
   String get locationImage {
     final lat = userLocation?.latitude;
